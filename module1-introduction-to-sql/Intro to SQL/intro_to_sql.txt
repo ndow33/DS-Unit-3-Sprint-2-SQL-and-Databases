@@ -1,0 +1,130 @@
+Use sqlite3 to load and write queries to explore the data, and answer the following questions:
+
+
+How many total Characters are there?
+
+SELECT count(distinct character_id) as character_count
+FROM charactercreator_character
+
+answer: 302
+
+
+
+
+How many of each specific subclass?
+
+SELECT count(distinct character_ptr_id) as cleric_count
+FROM charactercreator_cleric
+
+answer: 75
+
+SELECT count(distinct character_ptr_id) as fighter_count
+FROM charactercreator_fighter
+answer: 68
+
+SELECT count(distinct character_ptr_id) as mage_count
+FROM  charactercreator_mage
+answer: 108
+
+SELECT count(distinct mage_ptr_id) as necro_count
+FROM charactercreator_necromancer
+
+answer: 11
+
+SELECT
+	count(distinct character_ptr_id) as thief_count
+FROM 
+	charactercreator_thief
+
+answer: 51
+
+
+
+
+
+How many total Items?
+
+SELECT
+	count(distinct item_id) as item_count
+FROM 
+	armory_item
+answer: 174
+
+
+
+
+How many of the Items are weapons? How many are not?
+
+SELECT
+	count(distinct item_ptr_id) as weapon_count
+FROM 
+	armory_weapon
+answers: 37 and 174-37
+
+
+
+
+How many Items does each character have? (Return first 20 rows)
+
+SELECT
+	character_id,
+	count(distinct item_id) as items_per_character
+FROM 
+	charactercreator_character_inventory
+GROUP BY
+	character_id
+LIMIT
+	20
+
+
+
+
+How many Weapons does each character have? (Return first 20 rows)
+
+SELECT
+	character_id,
+	count(distinct item_id) as weapons_per_character
+FROM 
+	charactercreator_character_inventory
+WHERE
+	item_id > 137
+GROUP BY
+	character_id
+LIMIT
+	20
+	
+
+
+
+
+On average, how many Items does each Character have?
+
+SELECT AVG(items_per_character) as avg_items
+FROM(
+	SELECT
+		character_id,
+		count(distinct item_id) as items_per_character
+	FROM 
+		charactercreator_character_inventory
+	GROUP BY
+		character_id
+	)
+answer: 2.97
+
+
+
+On average, how many Weapons does each character have?
+
+SELECT AVG(weapons_per_character) as avg_weapons
+FROM(
+	SELECT
+		character_id,
+		count(distinct item_id) as weapons_per_character
+	FROM 
+		charactercreator_character_inventory
+	WHERE
+		item_id > 137
+	GROUP BY
+		character_id
+	)
+answer: 1.31
