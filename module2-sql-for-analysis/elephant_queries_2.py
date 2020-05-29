@@ -54,23 +54,10 @@ cursor.execute(query)
 # INSERT SOME DATA
 #
 
-my_dict = { "a": 1, "b": ["dog", "cat", 42], "c": 'true' }
 
-#insertion_query = f"INSERT INTO {table_name} (name, data) VALUES (%s, %s)"
-#cursor.execute(insertion_query,
-#  ('A rowwwww', 'null')
-#)
-#cursor.execute(insertion_query,
-#  ('Another row, with JSONNNNN', json.dumps(my_dict))
-#)
-
-# h/t: https://stackoverflow.com/questions/8134602/psycopg2-insert-multiple-rows-with-one-query
 insertion_query = f"INSERT INTO {table_name} (name, data) VALUES %s"
-#execute_values(cursor, insertion_query, [
-#  ('A rowwwww', 'null'),
-#  ('Another row, with JSONNNNN', json.dumps(my_dict)),
-#  ('Third row', "3")
-#])
+
+my_dict = { "a": 1, "b": ["dog", "cat", 42], "c": 'true' }
 
 df = pd.DataFrame([
   ['A rowwwww', 'null'],
@@ -79,7 +66,7 @@ df = pd.DataFrame([
   ["Pandas Row", "null"]
 ])
 
-records = df.to_dict("records") #> [{0: 'A rowwwww', 1: 'null'}, {0: 'Another row, with JSONNNNN', 1: '{"a": 1, "b": ["dog", "cat", 42], "c": "true"}'}, {0: 'Third row', 1: '3'}, {0: 'Pandas Row', 1: 'YOOO!'}]
+records = df.to_dict("records") 
 list_of_tuples = [(r[0], r[1]) for r in records]
 
 execute_values(cursor, insertion_query, list_of_tuples)
